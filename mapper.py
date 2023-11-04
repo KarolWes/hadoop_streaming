@@ -1,13 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+
 
 import sys
-import csv
 
 DEVELOPER_COL = 21
 RATING_COUNT_COL = 4
 RATING_COL = 3
 DATE_COL = 13
-for values in csv.reader(sys.stdin):
+for line in sys.stdin:
+    values = line.split("\u0001")
     dev_code = values[DEVELOPER_COL].strip()
     try:
         rating_count = int(values[RATING_COUNT_COL])

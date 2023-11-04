@@ -1,3 +1,7 @@
+drop table apps;
+drop table developers;
+drop table output;
+
 CREATE EXTERNAL TABLE IF NOT EXISTS apps(
     year int,
     dev_code bigint,
@@ -5,16 +9,16 @@ CREATE EXTERNAL TABLE IF NOT EXISTS apps(
     rating_count int,
     app_count int
 )
-ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
 location "${apps_file}";
 
 CREATE EXTERNAL TABLE IF NOT EXISTS developers(
-    dev_code bigint,
     name string,
     website string,
-    email string
+    email string,
+    dev_code bigint
 )
-ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\u0001' STORED AS TEXTFILE
 location "${devs_file}";
 
 create external table if not exists output(
@@ -42,3 +46,5 @@ INSERT INTO output (SELECT
                           group by year, name) as sub
                     where rank <= 3
                     order by year, rank);
+
+SELECT * from output limit 100;
