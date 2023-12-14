@@ -37,7 +37,7 @@ INSERT INTO output (SELECT
                     from (SELECT name,
                                  year,
                                  (sum(rating) / sum(rating_count))                                               as avg_rating,
-                                 rank() over (partition by year order by (sum(rating) / sum(rating_count)) desc) as rank,
+                                 row_number() over (partition by year order by (sum(rating) / sum(rating_count)) desc) as rank,
                                  sum(app_count)                                                                  as app_count_s,
                                  sum(rating_count)                                                               as rating_count_s
                           FROM apps
