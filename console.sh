@@ -11,8 +11,8 @@ gcloud dataproc clusters create ${CLUSTER_NAME} \
 --num-workers 2 \
 --worker-machine-type n1-standard-2 --worker-boot-disk-size 50 \
 --image-version 2.1-debian11 \
---optional-components DOCKER \
---project ${PROJECT_ID} --max-age=3h
+--optional-components JUPYTER \
+--project ${PROJECT_ID} --max-age=2h
 
 docker cp mapper.py namenode:mapper.py
 docker cp reductor.py namenode:reductor.py
@@ -29,12 +29,12 @@ hadoop fs -copyToLocal gs://pbd-23-kw/hive-project/final.hql /tmp/test
 hadoop fs -rm -r output_inter/
 hadoop fs -rm -r output/
 mapred streaming \
--files mapper.py,reductor.py,combiner.py \
+-files mapper.py,reductor.py,comb.py \
 -input gs://pbd-23-kw/hive-project/input/datasource1/  \
 -output output_inter \
 -mapper mapper.py \
 -reducer reductor.py \
--combiner combiner.py
+-combiner comb.py
 
 beeline -u jdbc:hive2://localhost:10000/default -n karol_wesolowski01 \
 --hivevar apps_file=output_inter \
