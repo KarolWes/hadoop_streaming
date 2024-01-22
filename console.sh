@@ -36,6 +36,15 @@ mapred streaming \
 -reducer reductor.py \
 -combiner comb.py
 
+hadoop fs -rm -r output_inter/
+mapred streaming -D mapred.reduce.tasks=1 \
+-files identity.py,intSum.py,intSum.py \
+-mapper identity.py \
+-combiner intSum.py \
+-reducer intSum.py \
+-input gs://pbd-23-kw/labs/hadoop/mapreduce/ \
+-output output_inter
+
 beeline -u jdbc:hive2://localhost:10000/default -n karol_wesolowski01 \
 --hivevar apps_file=output_inter \
 --hivevar devs_file=gs://pbd-23-kw/hive-project/input/datasource4 \
